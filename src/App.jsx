@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import cartData from "./data/cartData";
 import { STORAGE_KEYS } from "./constants/storageKeys";
 import { DELIVERY_TYPE, PAYMENT_METHODS } from "./constants/checkout";
-import { loadStorage, saveStorage } from "./utils/storage";
+import { loadStorage, saveStorage } from "./services/storageService";
 
 export default function App() {
 

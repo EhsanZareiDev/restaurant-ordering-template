@@ -1,5 +1,5 @@
 import { DELIVERY_TYPE } from "../constants/checkout";
-import { ORDER_STATUS } from "../constants/orderProgress/orderStatus";
+import { ORDER_STATUS } from "../constants/order";
 
 function generateOrderId() {
   return Date.now();

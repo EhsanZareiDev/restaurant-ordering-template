@@ -12,8 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { ShieldCheckIcon } from "@heroicons/react/24/outline";
 
 import { STORAGE_KEYS } from "../constants/storageKeys";
-import { saveStorage } from "../utils/storage";
-import { buildOrder } from "../utils/buildOrder";
+import { saveStorage } from "../services/storageService";
+import { buildOrder } from "../utils/order";
 
 export default function Checkout({
   orderForm,

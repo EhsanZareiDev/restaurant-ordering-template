@@ -1,10 +1,16 @@
 
-import { ORDER_STATUS } from "./orderStatus";
 
 import {HiOutlineCheckBadge} from "react-icons/hi2";
-
 import { IoRestaurantOutline } from "react-icons/io5";
 import { TbChefHat } from "react-icons/tb";
+
+export const ORDER_STATUS = {
+  CONFIRMED: "confirmed",
+  PREPARING: "preparing",
+  ASSIGNED: "assigned",
+  COMPLETED: "completed",
+  CANCELLED: "cancelled",
+};
 
 export const ORDER_PROGRESS = [
   {

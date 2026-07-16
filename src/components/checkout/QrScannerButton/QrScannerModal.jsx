@@ -2,7 +2,7 @@ import { Html5Qrcode } from "html5-qrcode";
 import { useEffect, useRef, useState } from "react";
 
 import Button from "../../common/Button";
-import Modal from "../../common/Modal/Modal";
+import Modal from "../../common/Modal";
 import LoadingSpinner from "./LoadingSpinner";
 import QrOverlay from "./QrOverlay";
 import { BiCameraOff } from "react-icons/bi";
