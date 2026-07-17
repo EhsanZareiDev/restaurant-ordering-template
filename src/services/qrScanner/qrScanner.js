@@ -43,7 +43,9 @@ export async function startScanner({
     if (scannerRef.current) {
       try {
         await scannerRef.current.clear();
-      } catch {}
+      } catch(err) {
+        console.error(err);
+      }
 
       scannerRef.current = null;
     }

@@ -1,17 +1,23 @@
-import { useEffect, useRef, useState } from "react";
-// Third Party Libraries
-import { Html5Qrcode } from "html5-qrcode";
+import { useCallback, useEffect, useRef, useState } from "react";
 // Icons
 import { BiCameraOff } from "react-icons/bi";
 import { FiRepeat } from "react-icons/fi";
 import { IoWarningOutline } from "react-icons/io5";
 // Services
-import { startScanner, stopScanner } from "../../../services/qrScanner/qrScanner";
+import {
+  startScanner,
+  stopScanner,
+} from "../../../services/qrScanner/qrScanner";
+import { scanImage } from "../../../services/qrScanner/scanImage";
+
+import { watchCameraPermission } from "../../../utils/qrScanner/cameraPermission";
+import { getCameraErrorMessage } from "../../../utils/qrScanner/cameraErrors";
 // Components
 import Button from "../../common/Button";
 import Modal from "../../common/Modal";
 import LoadingSpinner from "./LoadingSpinner";
 import QrOverlay from "./QrOverlay";
+
 
 export default function QrScannerModal({ isOpen, onClose, onScan }) {
   const scannerRef = useRef(null);
@@ -24,34 +30,10 @@ export default function QrScannerModal({ isOpen, onClose, onScan }) {
   const [imageScanError, setImageScanError] = useState("");
   const [isScannerLoading, setIsScannerLoading] = useState(false);
 
-  // Listen for camera permission changes and handle revocation
-  const watchCameraPermission = async () => {
-    if (!isOpen) return;
-    if (!navigator.permissions) return;
-
-    try {
-      const permission = await navigator.permissions.query({
-        name: "camera",
-      });
-
-      permissionCameraRef.current = permission;
-
-      permission.onchange = async () => {
-        if (permission.state === "denied") {
-          await stopScanner();
-
-          setCameraError({
-            name: "NotAllowedError",
-          });
-        }
-      };
-    } catch (error) {
-      console.warn("Permission API:", error);
-    }
-  };
+  const cameraMessage = getCameraErrorMessage(cameraError);
 
   // Start scanner
-  const scannerInstallation = async () => {
+  const runScanner = useCallback(async () => {
     await startScanner({
       elementId: "qr-reader",
       scannerRef,
@@ -63,27 +45,60 @@ export default function QrScannerModal({ isOpen, onClose, onScan }) {
       onError: setCameraError,
       onLoadingChange: setIsScannerLoading,
     });
-  };
-
-  // Stop and destroy scanner instance
+  },[onScan, onClose])
 
   useEffect(() => {
     if (isOpen) {
       setCameraError(null);
       setImageScanError("");
-      void scannerInstallation();
-      void watchCameraPermission();
+      void runScanner();
+      void watchCameraPermission({
+        isOpen,
+        permissionCameraRef,
+        stopScanner: () => stopScanner(scannerRef, scannedRef),
+        onDenied: () => {
+          setCameraError({
+            name: "NotAllowedError",
+          });
+        },
+      });
     } else {
-      void stopScanner(scannerRef, scannedRef);;
+      void stopScanner(scannerRef, scannedRef);
     }
 
     return () => {
       if (permissionCameraRef.current) {
         permissionCameraRef.current.onchange = null;
       }
-      void stopScanner(scannerRef, scannedRef);;
+      void stopScanner(scannerRef, scannedRef);
     };
-  }, [isOpen]);
+  }, [isOpen,]);
+
+    // Pause and resume the scanner when the page visibility changes
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!isOpen) return;
+
+      if (document.visibilityState === "hidden") {
+        if (scannerRef.current) {
+          void stopScanner(scannerRef, scannedRef);
+        }
+      }
+      if (document.visibilityState === "visible") {
+        if (!scannerRef.current) {
+          if (!cameraError) {
+            runScanner();
+          }
+        }
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+
+  }, [isOpen, cameraError]);
 
   // Decode QR code from uploaded image
   const handleImageScan = async (e) => {
@@ -94,119 +109,21 @@ export default function QrScannerModal({ isOpen, onClose, onScan }) {
     if (!file) return;
     e.target.value = "";
 
-    await stopScanner();
-    const scanner = new Html5Qrcode("image-reader");
+    await stopScanner(scannerRef, scannedRef);
 
     try {
-      const decodedText = await scanner.scanFile(file, true);
+      const decodedText = await scanImage(file);
       await onScan(decodedText);
       onClose();
     } catch (error) {
-      console.error("Image Scan Error:", error);
+      console.error(error);
       setImageScanError(
         "QR code could not be detected. Please upload a clearer image.",
       );
 
-      void startScanner();
-    } finally {
-      try {
-        await scanner.clear();
-      } catch (error) {
-        console.warn("Image Scan Error:", error);
-      }
+      await runScanner();
     }
   };
-
-  // Map camera-related errors to a unified structure for UI handling
-  const normalizeCameraError = (error) => {
-    const message = error?.message || "";
-
-    if (message.includes("NotAllowedError")) {
-      return {
-        name: "NotAllowedError",
-        message,
-      };
-    }
-
-    if (message.includes("NotFoundError")) {
-      return {
-        name: "NotFoundError",
-        message,
-      };
-    }
-
-    if (message.includes("NotReadableError")) {
-      return {
-        name: "NotReadableError",
-        message,
-      };
-    }
-
-    return {
-      name: error?.name || "UnknownError",
-      message,
-    };
-  };
-
-  // Generate user-friendly messages for camera-related errors
-  const getCameraErrorMessage = () => {
-    if (!cameraError) return null;
-
-    switch (normalizeCameraError(cameraError)) {
-      case "NotAllowedError":
-        return {
-          title: "Camera Permission Denied",
-          description:
-            "Please allow camera access or upload a QR image instead.",
-        };
-
-      case "NotFoundError":
-        return {
-          title: "Camera Not Found",
-          description: "No camera was detected on this device.",
-        };
-
-      case "NotReadableError":
-        return {
-          title: "Camera Busy",
-          description:
-            "Your camera is currently being used by another application.",
-        };
-
-      default:
-        return {
-          title: "Camera Error",
-          description: "Unable to start the camera.",
-        };
-    }
-  };
-  const cameraMessage = getCameraErrorMessage();
-
-  // Pause and resume the scanner when the page visibility changes
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (!isOpen) return;
-
-      if (document.visibilityState === "hidden") {
-        if (scannerRef.current) {
-          void stopScanner();
-        }
-      }
-      if (document.visibilityState === "visible") {
-        if (!scannerRef.current) {
-          if (!cameraError) {
-            startScanner();
-          }
-        }
-      }
-    };
-
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, [isOpen]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Scan QR Code" size="md">
@@ -270,7 +187,7 @@ export default function QrScannerModal({ isOpen, onClose, onScan }) {
                   className="text-orange-500 border border-orange-400 p-3 rounded-xl flex gap-2 items-center"
                   onClick={() => {
                     setCameraError(null);
-                    void startScanner();
+                    void runScanner();
                   }}
                 >
                   <FiRepeat className="w-5 h-5" /> Retry Camera
