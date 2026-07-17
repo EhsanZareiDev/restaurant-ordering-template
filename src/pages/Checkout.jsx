@@ -1,19 +1,23 @@
 import { useState, useMemo } from "react";
-
-import OrderSummary from "./../components/orderSummary/OrderSummary";
+// Third Party Libraries
+import { useNavigate } from "react-router-dom";
+// Icons
+import { ShieldCheckIcon } from "@heroicons/react/24/outline";
+// Constants
+import { STORAGE_KEYS } from "../constants/storageKeys";
+// Services
+import { saveStorage } from "../services/storageService";
+// Utils
+import { validateField, validateForm } from "../utils/validation";
+import { buildOrder } from "../utils/order";
+// Layouts
 import PageContainer from "../layouts/PageContainer";
 import PageHeader from "../layouts/PageHeader";
 import PageFooter from "../layouts/PageFooter";
+// Components
+import OrderSummary from "../components/orderSummary/OrderSummary";
 import OrderForm from "../components/checkout/OrderForm";
 import DeliverySelector from "../components/checkout/DeliverySelector";
-
-import { useNavigate } from "react-router-dom";
-
-import { ShieldCheckIcon } from "@heroicons/react/24/outline";
-
-import { STORAGE_KEYS } from "../constants/storageKeys";
-import { saveStorage } from "../services/storageService";
-import { buildOrder } from "../utils/order";
 
 export default function Checkout({
   orderForm,
@@ -24,6 +28,9 @@ export default function Checkout({
   cart,
 }) {
   const navigate = useNavigate();
+
+  const [errors, setErrors] = useState({});
+  const [isTableCodeAnimated, setIsTableCodeAnimated] = useState(false);
 
   const validationRules = useMemo(
     () => ({
@@ -79,57 +86,24 @@ export default function Checkout({
     [deliveryType],
   );
 
-  const [errors, setErrors] = useState({});
-
-  const validateField = (fieldName, value) => {
-    const rule = validationRules[fieldName];
-
-    if (!rule) return null;
-
-    const trimmedValue = value.trim();
-
-    // Required Validation
-    if (rule.required) {
-      const isRequired =
-        typeof rule.required === "function" ? rule.required() : rule.required;
-
-      if (isRequired && !trimmedValue) {
-        return rule.requiredMessage;
-      }
-    }
-
-    if (!trimmedValue) {
-      return null;
-    }
-
-    // Min Length Validation
-    if (rule.minLength && trimmedValue.length < rule.minLength) {
-      return rule.minLengthMessage;
-    }
-
-    // Regex Validation
-    if (rule.regex && !rule.regex.test(trimmedValue)) {
-      return rule.regexMessage;
-    }
-
-    return null;
-  };
-
+  // Handlers
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
     checkoutActions.setOrderForm((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
 
-    const error = validateField(e.target.name, e.target.value);
+    const error = validateField(name, value, validationRules);
 
     setErrors((prevErrors) => {
       const newErrors = { ...prevErrors };
 
       if (error) {
-        newErrors[e.target.name] = error;
+        newErrors[name] = error;
       } else {
-        delete newErrors[e.target.name];
+        delete newErrors[name];
       }
 
       return newErrors;
@@ -139,14 +113,7 @@ export default function Checkout({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const newErrors = {};
-    Object.entries(orderForm).forEach(([fieldName, value]) => {
-      const error = validateField(fieldName, value);
-
-      if (error) {
-        newErrors[fieldName] = error;
-      }
-    });
+    const newErrors = validateForm(orderForm, validationRules);
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
@@ -161,10 +128,10 @@ export default function Checkout({
       saveStorage(STORAGE_KEYS.ORDER, order);
 
       navigate("/order-details");
+    } else {
+      return;
     }
   };
-
-  const [isTableCodeAnimated, setIsTableCodeAnimated] = useState(false);
 
   const handleScanTableCode = (tableCode) => {
     checkoutActions.setOrderForm((prev) => ({

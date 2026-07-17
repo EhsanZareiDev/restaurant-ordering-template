@@ -1,66 +1,36 @@
-import { BsReceipt } from "react-icons/bs";
-import InvoiceToolbar from "../components/orderDetails/InvoiceToolbar";
-import {OrderProgress} from "../components/orderDetails/OrderProgress/OrderProgress";
-import PageContainer from "../layouts/PageContainer";
-import PageHeader from "../layouts/PageHeader";
-import InvoiceDocument from "../components/invoice/InvoiceDocument";
-import { useMemo, useRef, useState } from "react";
-
-import { exportInvoicePNG, exportInvoicePDF } from "../services/exportService";
-import { STORAGE_KEYS } from "../constants/storageKeys";
-import PageFooter from "../layouts/PageFooter";
-import { loadStorage } from "../services/storageService";
+import { useEffect, useMemo, useRef, useState } from "react";
+// Third Party Libraries
 import { useNavigate } from "react-router-dom";
+// Icons
+import { BsReceipt } from "react-icons/bs";
+// Constants
+import { STORAGE_KEYS } from "../constants/storageKeys";
+// Services
+import { loadStorage } from "../services/storageService";
+import { exportInvoicePNG, exportInvoicePDF } from "../services/exportService";
+// Utils
+import { formatDateTimeForAside } from "../utils/formatDate";
+// Layouts
+import PageHeader from "../layouts/PageHeader";
+import PageContainer from "../layouts/PageContainer";
+import PageFooter from "../layouts/PageFooter";
+// Components
+import InvoiceToolbar from "../components/orderDetails/InvoiceToolbar";
+import OrderProgress from "../components/orderDetails/OrderProgress/OrderProgress";
+import InvoiceDocument from "../components/invoice/InvoiceDocument";
 
 export default function OrderDetails() {
-  const navigate = useNavigate();
   const invoiceRef = useRef(null);
+  const navigate = useNavigate();
 
+  //For Export Loading
   const [exportState, setExportState] = useState({
     loading: false,
     type: null, // "png" | "pdf"
   });
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const handlePrint = () => {
-    window.print();
-  };
-
-  const handleDownloadPNG = async () => {
-    try {
-      setExportState({
-        loading: true,
-        type: "png",
-      });
-
-      await exportInvoicePNG(invoiceRef.current, order.invoiceNumber);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setExportState({
-        loading: false,
-        type: null,
-      });
-    }
-  };
-
-  const handleDownloadPDF = async () => {
-    try {
-      setExportState({
-        loading: true,
-        type: "pdf",
-      });
-
-      await exportInvoicePDF(invoiceRef.current, order.invoiceNumber);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setExportState({
-        loading: false,
-        type: null,
-      });
-    }
-  };
-
+  //Loading Order
   const order = useMemo(() => {
     try {
       const storedOrder = loadStorage(STORAGE_KEYS.ORDER);
@@ -77,30 +47,49 @@ export default function OrderDetails() {
     }
   }, []);
 
-  if (!order) {
-    navigate("/checkout");
-}
+  useEffect(() => {
+    if (!order) {
+      navigate("/checkout", { replace: true });
+    }
+  }, [order, navigate]);
 
-  const formatDateTimeForAside = () => {
-    const d = new Date(order.createdAt);
+  // Format Date & Time For Aside
+  const { formattedDate, formattedTime } = formatDateTimeForAside(
+    order.createdAt,
+  );
 
-    const formattedDate = new Intl.DateTimeFormat("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    }).format(d);
-
-    const formattedTime = new Intl.DateTimeFormat("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    }).format(d);
-
-    return { formattedDate, formattedTime };
+  // Export Handler
+  const handlePrint = () => {
+    window.print();
   };
+
+  const handleDownload = async (type) => {
+    try {
+      setExportState({
+        loading: true,
+        type,
+      });
+
+      if (type === "png") {
+        await exportInvoicePNG(invoiceRef.current, order.invoiceNumber);
+      } else if (type === "pdf") {
+        await exportInvoicePDF(invoiceRef.current, order.invoiceNumber);
+      } else {
+        console.error("handleDownload: Unknown type!");
+      }
+    } finally {
+      setExportState({
+        loading: false,
+        type: null,
+      });
+      
+      setIsDropdownOpen(false);
+    }
+  };
+
   return (
     <main className="min-h-screen">
-      <PageHeader title="Continue Shopping" to="/" />
+      <PageHeader title="Return to Menu" to="/" />
       <PageContainer>
         <div className="">
           <div
@@ -124,9 +113,11 @@ export default function OrderDetails() {
 
             <InvoiceToolbar
               onPrint={handlePrint}
-              onDownloadPNG={handleDownloadPNG}
-              onDownloadPDF={handleDownloadPDF}
+              onDownloadPNG={() => handleDownload("png")}
+              onDownloadPDF={() => handleDownload("pdf")}
               exportState={exportState}
+              isDropdownOpen={isDropdownOpen}
+              setIsDropdownOpen={setIsDropdownOpen}
             />
           </div>
           <div
@@ -169,8 +160,7 @@ export default function OrderDetails() {
 
             <div className="">
               <p className="mt-1 text-sm text-stone-500">
-                {formatDateTimeForAside().formattedDate} •{" "}
-                {formatDateTimeForAside().formattedTime}
+                {formattedDate} • {formattedTime}
               </p>
             </div>
           </div>

@@ -1,5 +1,5 @@
+// Constants
 import { DELIVERY_TYPE } from "../../constants/checkout";
-
 
 export default function DeliverySelector({
   deliveryType,

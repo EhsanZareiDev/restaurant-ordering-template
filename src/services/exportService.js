@@ -1,12 +1,8 @@
 import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
 
-const getPixelRatio = () => {
-  return Math.max(window.devicePixelRatio || 1, 2);
-};
-
 // Create high-quality PNG image from DOM element
-export const createInvoiceImage = async (element) => {
+export const createInvoiceImage = async (element , color) => {
   if (!element) {
     throw new Error("element not found.");
   }
@@ -14,14 +10,14 @@ export const createInvoiceImage = async (element) => {
   return await toPng(element, {
     pixelRatio: getPixelRatio(),
     cacheBust: true,
-    backgroundColor: "#fff7ed",
+    backgroundColor: color,
     skipAutoScale: true,
   });
 };
 
 // Download invoice as PNG
 export const exportInvoicePNG = async (element, fileName) => {
-  const image = await createInvoiceImage(element);
+  const image = await createInvoiceImage(element , "#fff7ed");
 
   const link = document.createElement("a");
 
@@ -45,4 +41,8 @@ export const exportInvoicePDF = async (element, fileName) => {
   pdf.addImage(image, "PNG", 0, 0, 148, 210);
 
   pdf.save(`${fileName}.pdf`);
+};
+
+const getPixelRatio = () => {
+  return Math.max(window.devicePixelRatio || 1, 2);
 };

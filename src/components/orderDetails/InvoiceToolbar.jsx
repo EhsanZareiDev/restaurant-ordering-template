@@ -1,42 +1,51 @@
+import {useEffect } from "react";
+
+// Icons
 import { ChevronDownIcon, PrinterIcon } from "@heroicons/react/24/outline";
-import { useState,useEffect } from "react";
 import { BiDownload } from "react-icons/bi";
-import { BsFileImage, BsFilePdf, } from "react-icons/bs";
+import { BsFileImage, BsFilePdf } from "react-icons/bs";
 
-export default function InvoiceToolbar({onPrint , onDownloadPNG , onDownloadPDF , exportState}) {
+export default function InvoiceToolbar({
+  onPrint,
+  onDownloadPNG,
+  onDownloadPDF,
+  exportState,
+  isDropdownOpen,
+  setIsDropdownOpen,
+}) {
 
-    const [isDropdownOpen , setIsDropdownOpen] = useState(false);
+  // Close or Open Dropdown
+  useEffect(() => {
+    if (!isDropdownOpen) return;
 
-useEffect(() => {
-  if (!isDropdownOpen) return;
+    const handleEscClose = (e) => {
+      if (e.key === "Escape") {
+        setIsDropdownOpen(false);
+      }
+    };
 
-  const handleEscClose = (e) => {
-    if (e.key === "Escape") {
+    const handleClickOutside = () => {
       setIsDropdownOpen(false);
+    };
+
+    window.addEventListener("keydown", handleEscClose);
+    window.addEventListener("click", handleClickOutside);
+
+    return () => {
+      window.removeEventListener("keydown", handleEscClose);
+      window.removeEventListener("click", handleClickOutside);
+    };
+  }, [isDropdownOpen]);
+
+  const handleDownloadMenuToggle = (e) => {
+    if (!isDropdownOpen) {
+      e.stopPropagation();
+      setIsDropdownOpen(true);
     }
   };
-
-  const handleClickOutside = () => {
-    setIsDropdownOpen(false);
-  };
-
-  window.addEventListener("keydown", handleEscClose);
-  window.addEventListener("click", handleClickOutside);
-
-  return () => {
-    window.removeEventListener("keydown", handleEscClose);
-    window.removeEventListener("click", handleClickOutside);
-  };
-}, [isDropdownOpen]);
-
-    const downloadButtonClick = (e) => {
-        if (!isDropdownOpen) {
-            e.stopPropagation();
-            setIsDropdownOpen(true);
-        } 
-    }
   return (
     <div className="flex gap-2 justify-center md:justify-normal z-40">
+      {/* Print */}
       <button
         onClick={onPrint}
         className="
@@ -86,10 +95,10 @@ useEffect(() => {
               hover:shadow-orange-500/30
               active:scale-[0.98]
             "
-            onClick={downloadButtonClick}
+          onClick={handleDownloadMenuToggle}
         >
           <BiDownload className="w-5 h-5" />
-          Download 
+          Download
           <ChevronDownIcon className="w-3 h-3" />
         </button>
 
@@ -105,13 +114,15 @@ useEffect(() => {
               shadow-xl
               absolute
               outline-none
-              ${!isDropdownOpen && 'hidden'}
+              z-50
+              ${isDropdownOpen ? "block" : "hidden"}
             `}
-            onClick={(e) => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
         >
-            <button
+          {/* DownloadPDF */}
+          <button
             onClick={onDownloadPDF}
-              className="
+            className="
                   flex
                   w-full
                   items-center
@@ -124,15 +135,16 @@ useEffect(() => {
                   transition-colors
                   hover:bg-orange-50
                 "
-                disabled={exportState.loading && exportState.type === "pdf"}
-            >
-              <BsFilePdf className="w-5 h-5" />
-              {exportState.loading && exportState.type === "pdf" ? "Preparing..." : "Download PDF"}
-            </button>
+            disabled={exportState.loading}
+          >
+            <BsFilePdf className="w-5 h-5" />
+            Download PDF
+          </button>
 
-            <button
+          {/* DownloadPNG */}
+          <button
             onClick={onDownloadPNG}
-              className="
+            className="
                   flex
                   w-full
                   items-center
@@ -145,11 +157,11 @@ useEffect(() => {
                   transition-colors
                   hover:bg-orange-50
                 "
-                disabled={exportState.loading && exportState.type === "png"}
-            >
-              <BsFileImage className="w-5 h-5" />
-              {exportState.loading && exportState.type === "png" ? "Preparing..." : "Download PNG"}
-            </button>
+            disabled={exportState.loading}
+          >
+            <BsFileImage className="w-5 h-5" />
+            Download PNG
+          </button>
         </div>
       </div>
     </div>

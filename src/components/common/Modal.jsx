@@ -1,10 +1,12 @@
 import { useEffect } from "react";
+// Third Party Libraries
 import { createPortal } from "react-dom";
-
-
+// Icons
 import { FiX } from "react-icons/fi";
 
 export default function Modal({ isOpen, onClose, title, size='xl' , children , showHeader = true }) {
+  
+  // Close Modal
   useEffect(() => {
   if (!isOpen) return;
 

@@ -1,40 +1,77 @@
-import { Routes, Route } from "react-router-dom";
-import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
-import OrderDetails from "./pages/OrderDetails";
-import NotFound from "./pages/NotFound";
-import { useState, useEffect } from "react";
-import cartData from "./data/cartData";
-import { STORAGE_KEYS } from "./constants/storageKeys";
+// Third Party Libraries
+import { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
+
+// Constants
 import { DELIVERY_TYPE, PAYMENT_METHODS } from "./constants/checkout";
+import { STORAGE_KEYS } from "./constants/storageKeys";
+
+// Data
+import cartData from "./data/cartData";
+import coupons from "./data/coupons";
+
+// Services
 import { loadStorage, saveStorage } from "./services/storageService";
 
+// Pages
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import NotFound from "./pages/NotFound";
+import OrderDetails from "./pages/OrderDetails";
+
 export default function App() {
+  // State
 
   // Cart Data
-const [cart, setCart] = useState(() => {
-  try {
-    const storedCart = loadStorage(STORAGE_KEYS.CART);
-    return storedCart ? storedCart : cartData;
-  } catch {
-    return cartData;
-  }
-});
-  useEffect(() => {
-    saveStorage(STORAGE_KEYS.CART , cart);
-  }, [cart]);
+  const [cart, setCart] = useState(() => {
+    try {
+      const storedCart = loadStorage(STORAGE_KEYS.CART);
+      return storedCart ? storedCart : cartData;
+    } catch {
+      return cartData;
+    }
+  });
 
-  // Coupons & Coupon Function
-  const coupons = [
-    {
-      code: "2020AB",
-      discountPercent: 20,
-    },
-  ];
+  // Coupons State
   const [discountPercent, setDiscountPercent] = useState(0);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponStatus, setCouponStatus] = useState("idle"); //error or success or idle
 
+  // OrderForm & Checkout Page
+  const [orderForm, setOrderForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+    postalCode: "",
+    addressTitle: "",
+    table: "",
+    description: "",
+  });
+  const [deliveryType, setDeliveryType] = useState(DELIVERY_TYPE.RESTAURANT);
+  const [paymentMethod, setPaymentMethod] = useState(PAYMENT_METHODS.ONLINE);
+
+  useEffect(() => {
+    saveStorage(STORAGE_KEYS.CART, cart);
+  }, [cart]);
+
+  // Derived Values
+
+  const subTotal = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
+  const tax = subTotal * 0.1;
+
+  const deliveryFee = deliveryType === DELIVERY_TYPE.DELIVERY ? 3 : 0;
+
+  const discountAmount = subTotal * (discountPercent / 100);
+
+  const finalPrice = subTotal + tax + deliveryFee - discountAmount;
+
+  // Actions
+
+  //Coupon Function
   const applyCoupon = (couponCode) => {
     if (appliedCoupon) return;
 
@@ -85,42 +122,7 @@ const [cart, setCart] = useState(() => {
     clearCart,
   };
 
-  // OrderForm & Checkout Page
-  const [orderForm, setOrderForm] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    address: "",
-    postalCode: "",
-    addressTitle: "",
-    table: "",
-    description: "",
-  });
-
-  const [deliveryType, setDeliveryType] = useState(DELIVERY_TYPE.RESTAURANT);
-
-  const [paymentMethod, setPaymentMethod] = useState(PAYMENT_METHODS.ONLINE);
-
-  const checkoutActions = {
-    setOrderForm,
-    setDeliveryType,
-    setPaymentMethod,
-  };
-
-  // Order Summary
-  const subTotal = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
-  );
-  const tax = subTotal * 0.1;
-
-  const deliveryFee = deliveryType === "delivery" ? 3 : 0;
-
-  const discountAmount = subTotal * (discountPercent / 100);
-
-  const finalPrice = subTotal + tax + deliveryFee - discountAmount;
-
-  const orderSummary = {
+    const orderSummary = {
     subTotal,
     tax,
     deliveryFee,
@@ -129,8 +131,15 @@ const [cart, setCart] = useState(() => {
     finalPrice,
   };
 
+  const checkoutActions = {
+    setOrderForm,
+    setDeliveryType,
+    setPaymentMethod,
+  };
+
   return (
     <>
+      {/* Routes */}
       <Routes>
         <Route
           path="/"
@@ -158,12 +167,7 @@ const [cart, setCart] = useState(() => {
           }
         />
 
-        <Route
-          path="/order-details"
-          element={
-            <OrderDetails />
-          }
-        />
+        <Route path="/order-details" element={<OrderDetails />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

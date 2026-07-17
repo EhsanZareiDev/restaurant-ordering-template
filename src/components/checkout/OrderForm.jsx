@@ -1,19 +1,21 @@
+// Icons
 import {
   ChatBubbleBottomCenterTextIcon,
   HomeModernIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-import Input from "../common/Input";
 import { FaMobileAlt } from "react-icons/fa";
 import { MdOutlineMail, MdTableRestaurant } from "react-icons/md";
-import FormTextarea from "../common/FormTextarea";
-import { MapPinIcon } from "@heroicons/react/24/outline";
-import { HomeIcon } from "@heroicons/react/24/outline";
-import PaymentSelector from "./PaymentSelector";
-import QRcodeHero from "../../assets/image/QRcode.png";
-import { QrCodeIcon } from "@heroicons/react/24/outline";
-import QrScannerButton from "./QrScannerButton/QrScannerButton";
+import { MapPinIcon, HomeIcon, QrCodeIcon } from "@heroicons/react/24/outline";
+// Constants
 import { DELIVERY_TYPE } from "../../constants/checkout";
+// Components
+import Input from "../common/Input";
+import FormTextarea from "../common/FormTextarea";
+import QrScannerButton from "./QrScannerButton/QrScannerButton";
+import PaymentSelector from "./PaymentSelector";
+// Assets
+import QRcodeHero from "../../assets/image/QRcode.png";
 
 export default function OrderForm({
   orderForm,
@@ -62,7 +64,7 @@ export default function OrderForm({
               icon={<MdOutlineMail className="h-5 w-5" />}
             />
 
-            {/* Select Payment */}
+            {/* Description / Notes */}
             <FormTextarea
               label="Order Notes"
               name="description"
@@ -77,6 +79,7 @@ export default function OrderForm({
 
           {deliveryType === DELIVERY_TYPE.DELIVERY ? (
             <div className="space-y-4">
+              {/* Delivery Information */}
               <Input
                 label="Postal Code"
                 name="postalCode"
@@ -111,6 +114,7 @@ export default function OrderForm({
             </div>
           ) : (
             <div className="border border-stone-200 rounded-3xl p-5">
+              {/* Table Code / QR Scanner */}
               <div>
                 <h5 className="text-2xl font-bold text-stone-800 flex items-center gap-2">
                   <QrCodeIcon className="w-8 h-8 inline-block text-orange-500" />{" "}
@@ -149,6 +153,7 @@ export default function OrderForm({
           )}
         </div>
 
+        {/* Payment Method */}
         <div className="mt-4">
           <PaymentSelector
             paymentMethod={paymentMethod}

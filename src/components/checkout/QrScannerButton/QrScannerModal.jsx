@@ -1,13 +1,17 @@
-import { Html5Qrcode } from "html5-qrcode";
 import { useEffect, useRef, useState } from "react";
-
+// Third Party Libraries
+import { Html5Qrcode } from "html5-qrcode";
+// Icons
+import { BiCameraOff } from "react-icons/bi";
+import { FiRepeat } from "react-icons/fi";
+import { IoWarningOutline } from "react-icons/io5";
+// Services
+import { startScanner, stopScanner } from "../../../services/qrScanner/qrScanner";
+// Components
 import Button from "../../common/Button";
 import Modal from "../../common/Modal";
 import LoadingSpinner from "./LoadingSpinner";
 import QrOverlay from "./QrOverlay";
-import { BiCameraOff } from "react-icons/bi";
-import { FiRepeat } from "react-icons/fi";
-import { IoWarningOutline } from "react-icons/io5";
 
 export default function QrScannerModal({ isOpen, onClose, onScan }) {
   const scannerRef = useRef(null);
@@ -46,102 +50,38 @@ export default function QrScannerModal({ isOpen, onClose, onScan }) {
     }
   };
 
-  // Initialize camera scanner
-  const startScanner = async () => {
-    if (scannerRef.current) return;
-
-    setCameraError(null);
-    setIsScannerLoading(true);
-
-    scannedRef.current = false;
-
-    try {
-      scannerRef.current = new Html5Qrcode("qr-reader");
-
-      await scannerRef.current.start(
-        {
-          facingMode: "environment",
-        },
-
-        {
-          fps: 10,
-
-          qrbox: {
-            width: 250,
-            height: 250,
-          },
-        },
-
-        async (decodedText) => {
-          if (scannedRef.current) return;
-
-          scannedRef.current = true;
-
-          await stopScanner();
-
-          await onScan(decodedText);
-
-          onClose();
-        },
-
-        // Ignore scan errors
-        () => {},
-      );
-    } catch (error) {
-      console.error("Start Scanner Error :", error);
-      setCameraError(error);
-
-      // Reset failed scanner instance
-      if (scannerRef.current) {
-        try {
-          await scannerRef.current.clear();
-        } catch {}
-
-        scannerRef.current = null;
-      }
-    } finally {
-      setIsScannerLoading(false);
-    }
+  // Start scanner
+  const scannerInstallation = async () => {
+    await startScanner({
+      elementId: "qr-reader",
+      scannerRef,
+      scannedRef,
+      onSuccess: async (decodedText) => {
+        await onScan(decodedText);
+        onClose();
+      },
+      onError: setCameraError,
+      onLoadingChange: setIsScannerLoading,
+    });
   };
 
   // Stop and destroy scanner instance
-  const stopScanner = async () => {
-    const scanner = scannerRef.current;
-
-    if (!scanner) return;
-
-    scannerRef.current = null;
-
-    scannedRef.current = false;
-
-    try {
-      await scanner.stop();
-    } catch (error) {
-      console.warn("Scanner Stop :", error);
-    }
-
-    try {
-      await scanner.clear();
-    } catch (error) {
-      console.warn("Scanner Clear :", error);
-    }
-  };
 
   useEffect(() => {
     if (isOpen) {
       setCameraError(null);
       setImageScanError("");
-      void startScanner();
+      void scannerInstallation();
       void watchCameraPermission();
     } else {
-      void stopScanner();
+      void stopScanner(scannerRef, scannedRef);;
     }
 
     return () => {
       if (permissionCameraRef.current) {
         permissionCameraRef.current.onchange = null;
       }
-      void stopScanner();
+      void stopScanner(scannerRef, scannedRef);;
     };
   }, [isOpen]);
 

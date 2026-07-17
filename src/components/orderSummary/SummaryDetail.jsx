@@ -1,12 +1,7 @@
-
-
-
-
-
-export default function SummaryDetail({children}) {
-    return (
-                <div
-          className="
+export default function SummaryDetail({ children }) {
+  return (
+    <div
+      className="
             flex
             items-center
             justify-between
@@ -16,8 +11,8 @@ export default function SummaryDetail({children}) {
             transition
             hover:bg-stone-50
           "
-        >
-            {children}
-        </div>
-    );
+    >
+      {children}
+    </div>
+  );
 }

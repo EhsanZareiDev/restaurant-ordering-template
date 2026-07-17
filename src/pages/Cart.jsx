@@ -1,9 +1,14 @@
-import CartItem from "./../components/cart/CartItem";
-import OrderSummary from "./../components/orderSummary/OrderSummary";
+// Third Party Libraries
+import { useNavigate } from "react-router-dom";
+
+// Layouts
 import PageContainer from "../layouts/PageContainer";
 import PageHeader from "../layouts/PageHeader";
-import { useNavigate } from "react-router-dom";
 import PageFooter from "../layouts/PageFooter";
+
+// Components
+import CartItem from "./../components/cart/CartItem";
+import OrderSummary from "./../components/orderSummary/OrderSummary";
 
 export default function Cart({
   cart,
@@ -12,7 +17,8 @@ export default function Cart({
   couponsAction,
 }) {
   const navigate = useNavigate();
-  const handleSubmitButton = () => {
+
+  const handleCheckout = () => {
     if (orderSummary.subTotal === 0) return;
 
     navigate("/checkout");
@@ -40,7 +46,7 @@ export default function Cart({
             couponsAction={couponsAction}
             showCoupon={true}
             submitButtonText="Proceed to Checkout"
-            handleSubmitButton={handleSubmitButton}
+            handleSubmitButton={handleCheckout}
           />
         </aside>
       </PageContainer>

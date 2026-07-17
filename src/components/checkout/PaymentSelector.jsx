@@ -1,12 +1,15 @@
-import {
-  CreditCardIcon,
-  BanknotesIcon,
-} from "@heroicons/react/24/outline";
+
+// Icons
+import {CreditCardIcon, BanknotesIcon} from "@heroicons/react/24/outline";
+// Constants
+import { PAYMENT_METHODS } from "../../constants/checkout";
 
 export default function PaymentSelector({
   paymentMethod,
   setPaymentMethod,
 }) {
+  const Online = PAYMENT_METHODS.ONLINE;
+  const Cash = PAYMENT_METHODS.CASH;
   return (
     <div className="flex flex-col gap-2">
 
@@ -31,7 +34,7 @@ export default function PaymentSelector({
       >
         <button
           type="button"
-          onClick={() => setPaymentMethod("online")}
+          onClick={() => setPaymentMethod(Online)}
           className={`
             relative
             flex
@@ -49,7 +52,7 @@ export default function PaymentSelector({
             transition-all
             duration-300
             ${
-              paymentMethod === "online"
+              paymentMethod === Online
                 ? `
                   border-orange-500
                   bg-orange-50
@@ -72,7 +75,7 @@ export default function PaymentSelector({
               w-7
 
               ${
-                paymentMethod === "online"
+                paymentMethod === Online
                   ? "text-orange-500"
                   : "text-stone-500"
               }
@@ -98,15 +101,15 @@ export default function PaymentSelector({
               Pay securely using your bank card
             </span>
 
-            <span className={`rounded-4xl w-6 h-6 border ${paymentMethod === "online" ? 'border-orange-500' : 'border-stone-300'} flex justify-center items-center absolute top-3 right-3`}>
-                {paymentMethod === "online" && <span className="rounded-4xl w-4 h-4 bg-orange-500"></span>}
+            <span className={`rounded-4xl w-6 h-6 border ${paymentMethod === Online ? 'border-orange-500' : 'border-stone-300'} flex justify-center items-center absolute top-3 right-3`}>
+                {paymentMethod === Online && <span className="rounded-4xl w-4 h-4 bg-orange-500"></span>}
             </span>
           </div>
         </button>
 
                 <button
           type="button"
-          onClick={() => setPaymentMethod("cash")}
+          onClick={() => setPaymentMethod(Cash)}
           className={`
             relative
             flex
@@ -125,7 +128,7 @@ export default function PaymentSelector({
             duration-300
 
             ${
-              paymentMethod === "cash"
+              paymentMethod === Cash
                 ? `
                   border-orange-500
                   bg-orange-50
@@ -148,7 +151,7 @@ export default function PaymentSelector({
               w-7
 
               ${
-                paymentMethod === "cash"
+                paymentMethod === Cash
                   ? "text-orange-500"
                   : "text-stone-500"
               }
@@ -173,8 +176,8 @@ export default function PaymentSelector({
             >
               Pay with cash upon delivery or pickup.
             </span>
-                        <span className={`rounded-4xl w-6 h-6 border ${paymentMethod === "cash" ? 'border-orange-500' : 'border-stone-300'} flex justify-center items-center absolute top-3 right-3`}>
-                {paymentMethod === "cash" && <span className="rounded-4xl w-4 h-4 bg-orange-500"></span>}
+                        <span className={`rounded-4xl w-6 h-6 border ${paymentMethod === Cash ? 'border-orange-500' : 'border-stone-300'} flex justify-center items-center absolute top-3 right-3`}>
+                {paymentMethod === Cash && <span className="rounded-4xl w-4 h-4 bg-orange-500"></span>}
             </span>
           </div>
         </button>
