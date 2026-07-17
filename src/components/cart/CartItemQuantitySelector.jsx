@@ -1,20 +1,22 @@
-
-
-
-
-
-export default function CartItemQuantitySelector({decreaseQuantity,removeItem,increaseQuantity,quantity,id}) {
-    return (
-        <div
-              className="
+export default function CartItemQuantitySelector({
+  decreaseQuantity,
+  removeItem,
+  increaseQuantity,
+  quantity,
+  id,
+}) {
+  return (
+    <div
+      className="
               flex
               items-center
               gap-3
               float-left
             "
-            >
-              <button
-                className="
+    >
+      {/* Decrease Quantity */}
+      <button
+        className="
                 flex
                 h-11
                 w-11
@@ -35,17 +37,15 @@ export default function CartItemQuantitySelector({decreaseQuantity,removeItem,in
                 active:scale-90
                 cursor-pointer
               "
-                onClick={() => {
-                  quantity > 1
-                    ? decreaseQuantity(id)
-                    : removeItem(id);
-                }}
-              >
-                −
-              </button>
+        onClick={() => {
+          quantity > 1 ? decreaseQuantity(id) : removeItem(id);
+        }}
+      >
+        −
+      </button>
 
-              <div
-                className="
+      <div
+        className="
                 flex
                 h-11
                 min-w-[64px]
@@ -57,12 +57,13 @@ export default function CartItemQuantitySelector({decreaseQuantity,removeItem,in
                 font-bold
                 text-stone-800
               "
-              >
-                {quantity}
-              </div>
+      >
+        {quantity}
+      </div>
 
-              <button
-                className="
+      {/* Increase Quantity */}
+      <button
+        className="
                 flex
                 h-11
                 w-11
@@ -81,10 +82,10 @@ export default function CartItemQuantitySelector({decreaseQuantity,removeItem,in
                 active:scale-90
                 cursor-pointer
               "
-                onClick={() => increaseQuantity(id)}
-              >
-                +
-              </button>
-            </div>
-    );
+        onClick={() => increaseQuantity(id)}
+      >
+        +
+      </button>
+    </div>
+  );
 }

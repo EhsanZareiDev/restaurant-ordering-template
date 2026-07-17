@@ -1,7 +1,10 @@
-
-import { MinusIcon } from "@heroicons/react/24/outline";
-import InfoRow from "./InfoRow";
+// Icons
 import { HiOutlineUserCircle } from "react-icons/hi2";
+import { MinusIcon } from "@heroicons/react/24/outline";
+// Components
+import InfoRow from "./InfoRow";
+
+
 
 export default function CustomerSection({name , phone , email}) {
   return (

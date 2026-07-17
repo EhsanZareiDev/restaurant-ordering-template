@@ -1,26 +1,28 @@
+import { useEffect, useRef } from "react";
+// Icons
 import { TrashIcon } from "@heroicons/react/24/outline";
+// Components
 import CartItemImage from "./CartItemImage";
 import CartItemQuantitySelector from "./CartItemQuantitySelector";
-import { useEffect, useRef } from "react";
 
 export default function CartItem({ item, cartActions }) {
   const datailBox = useRef(null);
   const itemBox = useRef(null);
   const itemInfoBox = useRef(null);
 
+  const moveBox = () => {
+    if (!datailBox.current || !itemBox.current) return;
+
+    const windowIsSm = window.innerWidth <= 768;
+
+    if (windowIsSm) {
+      itemBox.current.appendChild(datailBox.current);
+    } else {
+      itemInfoBox.current.appendChild(datailBox.current);
+    }
+  };
+
   useEffect(() => {
-    const moveBox = () => {
-      if (!datailBox.current || !itemBox.current) return;
-
-      const windowIsSm = window.innerWidth <= 768;
-
-      if (windowIsSm) {
-        itemBox.current.appendChild(datailBox.current);
-      } else {
-        itemInfoBox.current.appendChild(datailBox.current);
-      }
-    };
-
     moveBox();
 
     window.addEventListener("resize", moveBox);
@@ -51,15 +53,11 @@ export default function CartItem({ item, cartActions }) {
         
       "
     >
-      {/* ==========================
-          Product Image
-      ========================== */}
+      {/*Product Image*/}
 
       <CartItemImage src={item.image} alt={item.name} />
 
-      {/* ==========================
-          Product Content
-      ========================== */}
+      {/* Product Content*/}
 
       <div
         className="
@@ -73,10 +71,7 @@ export default function CartItem({ item, cartActions }) {
         "
       >
         <div ref={itemInfoBox} className="md:space-y-4 space-y-0">
-          {/* ==========================
-            Product Header
-        ========================== */}
-
+          {/* Product Detail */}
           <div
             className="
               flex
@@ -109,6 +104,7 @@ export default function CartItem({ item, cartActions }) {
               </p>
             </div>
 
+            {/* Product Price */}
             <div className="text-right">
               <h3
                 className="
@@ -123,10 +119,6 @@ export default function CartItem({ item, cartActions }) {
             </div>
           </div>
 
-          {/* ==========================
-            Bottom Section
-        ========================== */}
-
           <div
             ref={datailBox}
             className="
@@ -139,9 +131,7 @@ export default function CartItem({ item, cartActions }) {
             justify-between
           "
           >
-            {/* ==========================
-              Quantity Selector
-          ========================== */}
+            {/* Quantity Selector */}
 
             <CartItemQuantitySelector
               decreaseQuantity={cartActions.decreaseQuantity}
@@ -151,9 +141,7 @@ export default function CartItem({ item, cartActions }) {
               id={item.id}
             />
 
-            {/* ==========================
-              Subtotal + Delete
-          ========================== */}
+            {/* Subtotal + Delete */}
 
             <div
               className="

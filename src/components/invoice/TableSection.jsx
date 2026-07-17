@@ -2,33 +2,28 @@ import InfoRow from "./InfoRow";
 import { IoRestaurantOutline } from "react-icons/io5";
 
 export default function TableSection({ tableCode }) {
-  const parseTableCode = () => {
+  const parseTableCode = (code) => {
+    if (!code) return {};
     const [, floorNum, number, section] = tableCode.split("-");
-    let floor = "";
 
-    switch (floorNum) {
-      case "01":
-        floor = "First";
-        break;
-
-      case "02":
-        floor = "Second";
-        break;
-
-      case "03":
-        floor = "Third";
-        break;
-    }
+    const FLOOR_MAP = {
+      "01": "First",
+      "02": "Second",
+      "03": "Third",
+    };
 
     return {
-      floor,
+      floor: FLOOR_MAP[floorNum] ?? floorNum,
       number,
       section,
     };
   };
-  
+
+  const tableInfo = parseTableCode(tableCode);
+
   return (
     <section className="bg-orange-50">
+      {/* Section Header */}
       <div className="mb-2 flex items-center gap-1">
         <IoRestaurantOutline
           className="
@@ -51,11 +46,11 @@ export default function TableSection({ tableCode }) {
       {/* Details */}
 
       <div className="space-y-1 pl-2">
-        <InfoRow label="Table NO." value={parseTableCode().number} />
+        <InfoRow label="Table No." value={tableInfo.number} />
 
-        <InfoRow label="Section" value={`${parseTableCode().section} hall`} />
+        <InfoRow label="Section" value={`${tableInfo.section} Hall`} />
 
-        <InfoRow label="Floor" value={`${parseTableCode().floor} floor`} />
+        <InfoRow label="Floor" value={`${tableInfo.floor} Floor`} />
       </div>
     </section>
   );

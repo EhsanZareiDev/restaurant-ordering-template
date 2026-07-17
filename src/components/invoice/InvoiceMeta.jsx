@@ -1,24 +1,21 @@
+// Icons
+import {
+  HiOutlineClock,
+  HiOutlineCalendarDays,
+  HiOutlineCreditCard,
+} from "react-icons/hi2";
+// Utils
+import { formatDate, formatTime } from "../../utils/formatDate";
 
-import {HiOutlineClock, HiOutlineCalendarDays, HiOutlineCreditCard } from "react-icons/hi2";
+export default function InvoiceMeta({ createdAt, paymentMethod }) {
+  const invoiceDate = formatDate({
+    date: createdAt,
+  });
 
-export default function InvoiceMeta({createdAt , paymentMethod}) {
-
-  const setFormatDate = () => {
-  return new Intl.DateTimeFormat("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  }).format(new Date(createdAt));
-};
-
-const setFormatTime = () => {
-  return new Intl.DateTimeFormat("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
+  const invoiceTime = formatTime({
+    date: createdAt,
     hour12: true,
-  }).format(new Date(createdAt));
-};
-
+  });
 
   return (
     <section
@@ -32,12 +29,21 @@ const setFormatTime = () => {
         mt-4
       "
     >
-      <MetaItem icon={<HiOutlineCalendarDays />} title="Date" value={setFormatDate()} />
-
-      <MetaItem icon={<HiOutlineClock />} title="Time" value={setFormatTime()} />
+      <MetaItem
+        Icon={HiOutlineCalendarDays}
+        title="Date"
+        value={invoiceDate}
+      />
 
       <MetaItem
-        icon={<HiOutlineCreditCard />}
+        Icon={HiOutlineClock}
+        title="Time"
+        isTime
+        value={invoiceTime}
+      />
+
+      <MetaItem
+        Icon={HiOutlineCreditCard}
         title="Payment Method"
         value={paymentMethod}
       />
@@ -45,7 +51,8 @@ const setFormatTime = () => {
   );
 }
 
-function MetaItem({ icon, title, value }) {
+
+function MetaItem({ Icon, title, value, isTime }) {
   return (
     <div className="flex items-center gap-2">
       <div
@@ -55,7 +62,7 @@ function MetaItem({ icon, title, value }) {
           text-orange-500
         "
       >
-        {icon}
+        <Icon />
       </div>
 
       <div>
@@ -64,7 +71,6 @@ function MetaItem({ icon, title, value }) {
             text-[10px]
             tracking-[1px]
             uppercase
-            tracking-wide
             text-stone-500
           "
         >
@@ -72,12 +78,12 @@ function MetaItem({ icon, title, value }) {
         </p>
 
         <p
-          className="
+          className={`
             text-[14px]
             font-medium
-            font-medium
             text-stone-800
-          "
+            ${isTime ? 'uppercase' : ''}
+          `}
         >
           {value}
         </p>

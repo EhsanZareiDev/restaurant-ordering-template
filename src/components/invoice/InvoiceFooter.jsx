@@ -1,7 +1,8 @@
+// Icons
 import { FiPhone, FiMail, FiMapPin } from "react-icons/fi";
-
-import Stamp from "../../assets/image/stamp.png";
 import { HiHeart } from "react-icons/hi2";
+// Assets
+import Stamp from "../../assets/image/stamp.png";
 
 export default function InvoiceFooter() {
   return (

@@ -1,4 +1,7 @@
 import { forwardRef } from "react";
+// Constants
+import { DELIVERY_TYPE } from "../../constants/checkout";
+// Components
 import CustomerSection from "./CustomerSection";
 import DeliverySection from "./DeliverySection";
 import InvoiceFooter from "./InvoiceFooter";
@@ -8,7 +11,6 @@ import InvoiceSummary from "./InvoiceSummary";
 import InvoiceTable from "./InvoiceTable";
 import OrderNote from "./OrderNote";
 import TableSection from "./TableSection";
-import { DELIVERY_TYPE } from "../../constants/checkout";
 
 const InvoiceDocument = forwardRef(({ order }, ref) => {
   return (
@@ -41,7 +43,7 @@ const InvoiceDocument = forwardRef(({ order }, ref) => {
         paymentMethod={order.payment.method}
       />
 
-      {/* Customer & Delivery || Table */}
+      {/* Customer + Delivery or Table */}
 
       <div className="flex justify-between items-center mt-4 mb-5 ">
         <CustomerSection

@@ -1,12 +1,11 @@
+import { useState } from "react";
+// Icons
+import { BiErrorCircle } from "react-icons/bi";
 import {
   CheckCircleIcon,
   CheckIcon,
   PlusIcon,
 } from "@heroicons/react/24/outline";
-import { useState } from "react";
-import { BiErrorCircle } from "react-icons/bi";
-import Input from "../common/Input";
-import { RiCouponFill } from "react-icons/ri";
 
 export default function CouponInput({ couponsAction }) {
   const [couponInput, setCouponInput] = useState("");
@@ -39,14 +38,6 @@ export default function CouponInput({ couponsAction }) {
             gap-2
           "
       >
-        {/* <Input
-          name="coupon"
-          placeholder="Enter coupon..."
-          value={couponInput}
-          disabled={couponsAction.couponStatus === "success"}
-          onChange={(e) => setCouponInput(e.target.value)}
-          icon={<RiCouponFill className="h-5 w-5" />}
-        /> */}
         <input
           id="coupon"
           type="text"

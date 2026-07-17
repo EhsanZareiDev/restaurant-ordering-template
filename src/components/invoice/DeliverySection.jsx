@@ -1,6 +1,8 @@
-
-import InfoRow from "./InfoRow";
+// Icons
 import { HiOutlineMapPin } from "react-icons/hi2";
+// Components
+import InfoRow from "./InfoRow";
+
 
 export default function DeliverySection({addressTitle , postalCode , address}) {
   return (

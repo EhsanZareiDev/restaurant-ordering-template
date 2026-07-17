@@ -1,3 +1,4 @@
+// Assets
 import Logo from "../../assets/image/Logo.png";
 
 export default function InvoiceHeader({invoiceNumber}) {
