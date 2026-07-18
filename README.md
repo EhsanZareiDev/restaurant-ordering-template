@@ -1,16 +1,208 @@
-# React + Vite
+# 🍽️ QR Restaurant Invoice & Checkout Template
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React + Vite restaurant checkout and invoice template with QR table support.
 
-Currently, two official plugins are available:
+This project is designed as a reusable front-end template for restaurants, cafés, food courts and QR ordering systems.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+# 📸 Screenshots
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Cart
 
-## Expanding the ESLint configuration
+![Cart](public/screenshots/cart.png)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Checkout
+
+![Checkout](public/screenshots/checkout.png)
+
+### Invoice
+
+![Invoice](public/screenshots/invoice.png)
+
+### QR Scanner
+
+![QR Scanner](public/screenshots/qr-scanner.png)
+
+---
+
+## ✨ Features
+
+### 🛒 Shopping Cart
+- Add / Remove items
+- Increase / Decrease quantity
+- Live total calculation
+- Discount coupon support
+- Tax calculation
+- Delivery fee calculation
+
+### 📦 Checkout
+- Restaurant / Delivery modes
+- Dynamic form fields
+- Client-side validation
+- Payment method selection
+- Table QR support
+
+### 📄 Invoice
+- Modern printable invoice
+- PNG export
+- PDF export
+- Browser printing
+- Order metadata
+- Customer information
+- Payment information
+- Restaurant information
+
+### 📱 QR Scanner
+- Camera QR scanning
+- Image QR scanning
+- Camera permission handling
+- Camera error handling
+- Retry support
+
+### 🚚 Order Tracking
+- Dynamic order progress
+- Different flow for
+  - Restaurant
+  - Delivery
+
+### 💾 Storage
+- LocalStorage persistence
+- Cart persistence
+- Order persistence
+
+---
+
+# 🛠 Tech Stack
+
+- React
+- Vite
+- React Router DOM
+- Tailwind CSS
+- Heroicons
+- React Icons
+- html5-qrcode
+- html-to-image
+- jsPDF
+
+---
+
+# 📂 Project Structure
+
+```
+src
+│
+├── components
+├── pages
+├── layouts
+├── constants
+├── utils
+├── services
+├── data
+├── assets
+└── App.jsx
+```
+
+---
+
+# 🚀 Installation
+
+Clone the repository
+
+```bash
+git clone https://github.com/EhsanZareiDev/qr-restaurant-invoice-template.git
+```
+
+Install dependencies
+
+```bash
+npm install
+```
+
+Run development server
+
+```bash
+npm run dev
+```
+
+Build project
+
+```bash
+npm run build
+```
+
+---
+
+# 📸 Screenshots
+
+### Cart
+
+![Cart](public/screenshots/cart.png)
+
+### Checkout
+
+![Checkout](public/screenshots/checkout.png)
+
+### Invoice
+
+![Invoice](public/screenshots/invoice.png)
+
+### QR Scanner
+
+![QR Scanner](public/screenshots/qr-scanner.png)
+
+---
+
+# 📋 Current Features
+
+- ✅ Shopping Cart
+- ✅ Checkout
+- ✅ Invoice
+- ✅ QR Scanner
+- ✅ Order Progress
+- ✅ Local Storage
+- ✅ PDF Export
+- ✅ PNG Export
+- ✅ Responsive Design
+
+---
+
+# 🗺 Roadmap
+
+## Version 2
+
+- Context API
+- useReducer
+- Backend Integration
+- Authentication
+- Dashboard
+- Order Management
+- Live Order Status
+- Toast Notifications
+- Dark Mode
+- Multi Language
+- Better Animations
+
+---
+
+# 🎯 Purpose
+
+This project was built as a reusable restaurant checkout template and as a learning project for modern React architecture and reusable component design.
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
+
+
+---
+
+# 👨‍💻 Author
+
+**Ehsan Zarei**
+
+Frontend Developer
+
+GitHub: https://github.com/EhsanZareiDev
+
