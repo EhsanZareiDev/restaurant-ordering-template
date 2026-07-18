@@ -110,7 +110,7 @@ src
 Clone the repository
 
 ```bash
-git clone https://github.com/EhsanZareiDev/qr-restaurant-invoice-template.git
+git clone https://github.com/EhsanZareiDev/restaurant-ordering-template.git
 ```
 
 Install dependencies
