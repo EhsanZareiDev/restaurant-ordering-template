@@ -4,6 +4,7 @@ import { TrashIcon } from "@heroicons/react/24/outline";
 // Components
 import CartItemImage from "./CartItemImage";
 import CartItemQuantitySelector from "./CartItemQuantitySelector";
+import { formatPrice } from "../../utils/formatPrice";
 
 export default function CartItem({ item, cartActions }) {
   const datailBox = useRef(null);
@@ -114,7 +115,7 @@ export default function CartItem({ item, cartActions }) {
                   text-orange-500
                 "
               >
-                ${item.price.toFixed(2)} <span className="">each.</span>
+                {formatPrice({price: item.price, isMinus: false})} <span className="">each.</span>
               </h3>
             </div>
           </div>
@@ -161,7 +162,7 @@ export default function CartItem({ item, cartActions }) {
                   text-stone-900
                 "
                 >
-                  ${item.price.toFixed(2) * item.quantity}
+                  {formatPrice({price: item.price * item.quantity, isMinus: false})}
                 </h3>
               </div>
 

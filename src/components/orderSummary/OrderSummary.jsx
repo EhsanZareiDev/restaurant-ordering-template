@@ -1,24 +1,24 @@
-
 // Icons
-import { MinusIcon, ShoppingBagIcon } from "@heroicons/react/20/solid";
+import { ShoppingBagIcon } from "@heroicons/react/20/solid";
 import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
-
+// Utils
+import { formatPrice } from "../../utils/formatPrice";
 // Components
 import CouponInput from "../cart/CouponInput";
 import SummaryDetail from "./SummaryDetail";
 import Button from "../common/Button";
 
-export default function OrderSummary({ orderSummary, couponsAction , showCoupon , submitButtonText , handleSubmitButton}) {
+export default function OrderSummary({
+  orderSummary,
+  couponsAction,
+  showCoupon,
+  submitButtonText,
+  handleSubmitButton,
+}) {
+  const { subTotal, tax, deliveryFee, discountAmount, finalPrice } =
+    orderSummary;
 
-  const {
-  subTotal,
-  tax,
-  deliveryFee,
-  discountAmount,
-  finalPrice,
-} = orderSummary;
-
-const hasDiscount = discountAmount > 0
+  const hasDiscount = discountAmount > 0;
   return (
     <div
       className="
@@ -68,19 +68,18 @@ const hasDiscount = discountAmount > 0
           <span className="text-stone-500">Subtotal</span>
 
           <span className=" text-stone-900 text-lg">
-            ${subTotal.toFixed(2)}
+            {formatPrice({
+              price: subTotal,
+              isMinus: false,
+            })}
           </span>
         </SummaryDetail>
 
         <SummaryDetail>
           <span className="text-stone-500">Delivery</span>
 
-          <span
-            className=" text-stone-900 text-lg"
-          >
-            {deliveryFee === 0
-              ? <MinusIcon className="w-6 h-6" />
-              : `$${deliveryFee.toFixed(2)}`}
+          <span className=" text-stone-900 text-lg">
+            {formatPrice({ price: deliveryFee })}
           </span>
         </SummaryDetail>
 
@@ -88,21 +87,21 @@ const hasDiscount = discountAmount > 0
           <span className="text-stone-500">Tax</span>
 
           <span className=" text-stone-900 text-lg">
-            ${tax.toFixed(2)}
+            {formatPrice({ price: tax })}
           </span>
         </SummaryDetail>
 
         <SummaryDetail>
-          <span className={`text-lg  ${!hasDiscount ? "text-stone-500" : "text-green-600"}`}>Discount</span>
+          <span
+            className={`text-lg  ${!hasDiscount ? "text-stone-500" : "text-green-600"}`}
+          >
+            Discount
+          </span>
 
           <span
             className={`text-lg  ${!hasDiscount ? "text-stone-900" : "text-green-600"}`}
           >
-
-                        {!hasDiscount
-              ? <MinusIcon className="w-6 h-6" />
-              : `- $${discountAmount.toFixed(2)}`}
-
+            {hasDiscount ? "-" : ""} {formatPrice({ price: discountAmount })}
           </span>
         </SummaryDetail>
       </div>
@@ -136,7 +135,7 @@ const hasDiscount = discountAmount > 0
             text-orange-500
           "
         >
-          ${finalPrice.toFixed(2)}
+          {finalPrice === 0 ? "Free" : formatPrice({ price: finalPrice })}
         </h2>
       </div>
 

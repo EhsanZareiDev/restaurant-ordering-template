@@ -1,3 +1,6 @@
+// Utils
+import { formatPrice } from "../../utils/formatPrice";
+
 export default function InvoiceTable({ cart }) {
   return (
     <section className="rounded-lg border border-orange-200">
@@ -87,7 +90,7 @@ function InvoiceRow({ className , item }) {
           text-stone-800
         "
       >
-        ${item.price.toFixed(2)}
+        {formatPrice({price: item.price, isMinus: false})}
       </p>
 
       {/* Quantity */}
@@ -113,7 +116,7 @@ function InvoiceRow({ className , item }) {
           text-stone-800
         "
       >
-        ${item.price.toFixed(2) * item.quantity}
+        {formatPrice({price: item.price * item.quantity, isMinus: false})}
       </p>
     </div>
   );
