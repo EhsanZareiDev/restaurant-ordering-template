@@ -133,6 +133,56 @@ npm run build
 
 ---
 
+## 🧪 Demo Data
+
+The project includes sample data so you can test all features immediately after installation.
+
+### Coupon
+
+Use the following coupon code to test the discount system:
+
+| Coupon Code | Discount |
+| ------------ | -------- |
+| `2020AB` | **20% OFF** |
+
+---
+
+### Table QR Code Format
+
+Restaurant table codes follow the format below:
+
+```text
+T-(01-03)-(01-15)-(VIP-Main-Outdoor)
+```
+
+Meaning:
+
+- **Floor:** `01 – 03`
+- **Table Number:** `01 – 15`
+- **Section:** `VIP`, `Main`, or `Terrace`
+
+Example:
+
+```text
+T-01-05-Main
+```
+
+You can manually enter this code or scan a QR code containing the same value to test the QR Scanner feature.
+
+---
+
+### Sample Customer Information
+
+You can use the following information while testing the checkout process:
+
+- **Name:** John Smith
+- **Phone:** +12025550123
+- **Email:** john@example.com
+- **Address:** 25 Sunset Street
+- **Postal Code:** 90210
+
+> These values are for demonstration purposes only.
+
 # 📸 Screenshots
 
 ### Cart
@@ -149,7 +199,7 @@ npm run build
 
 ### QR Scanner
 
-![QR Scanner](public/screenshots/qr-scanner.png)
+![QR Scanner](public/screenshots/scanner.png)
 
 ---
 
