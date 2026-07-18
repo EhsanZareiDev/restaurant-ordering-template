@@ -1,5 +1,7 @@
 import { useState } from "react";
+// Icon
 import { MdOutlineQrCodeScanner } from "react-icons/md";
+// Component
 import QrScannerModal from "./QrScannerModal";
 
 export default function QrScannerButton({
@@ -7,18 +9,7 @@ export default function QrScannerButton({
   disabled = false,
   children,
 }) {
-
-  const scanWithCamera = async () => {
-
-    const scanner = new Html5Qrcode("qr-reader");
-
-};
-
-  const handleScan = async () => {
-    
-  };
-
-  const [isOpenQrScanner , setIsOpenQrScanner] = useState(false)
+  const [isOpenQrScanner, setIsOpenQrScanner] = useState(false);
 
   return (
     <button
@@ -43,7 +34,13 @@ export default function QrScannerButton({
 
       <span>{children}</span>
 
-      <QrScannerModal isOpen={isOpenQrScanner} onClose={() => {setIsOpenQrScanner(false)}} onScan={onScan} />
+      <QrScannerModal
+        isOpen={isOpenQrScanner}
+        onClose={() => {
+          setIsOpenQrScanner(false);
+        }}
+        onScan={onScan}
+      />
     </button>
   );
 }

@@ -9,7 +9,7 @@ import {
   stopScanner,
 } from "../../../services/qrScanner/qrScanner";
 import { scanImage } from "../../../services/qrScanner/scanImage";
-
+// Utils
 import { watchCameraPermission } from "../../../utils/qrScanner/cameraPermission";
 import { getCameraErrorMessage } from "../../../utils/qrScanner/cameraErrors";
 // Components
@@ -21,8 +21,6 @@ import QrOverlay from "./QrOverlay";
 
 export default function QrScannerModal({ isOpen, onClose, onScan }) {
   const scannerRef = useRef(null);
-  const permissionCameraRef = useRef(null);
-
   const scannedRef = useRef(false);
   const fileInputRef = useRef(null);
 
@@ -47,14 +45,17 @@ export default function QrScannerModal({ isOpen, onClose, onScan }) {
     });
   },[onScan, onClose])
 
-  useEffect(() => {
+useEffect(() => {
+  let cleanupPermission = () => {};
+
+  const init = async () => {
     if (isOpen) {
       setCameraError(null);
       setImageScanError("");
-      void runScanner();
-      void watchCameraPermission({
-        isOpen,
-        permissionCameraRef,
+
+      await runScanner();
+
+      cleanupPermission = await watchCameraPermission({
         stopScanner: () => stopScanner(scannerRef, scannedRef),
         onDenied: () => {
           setCameraError({
@@ -63,16 +64,18 @@ export default function QrScannerModal({ isOpen, onClose, onScan }) {
         },
       });
     } else {
-      void stopScanner(scannerRef, scannedRef);
+      await stopScanner(scannerRef, scannedRef);
     }
+  };
 
-    return () => {
-      if (permissionCameraRef.current) {
-        permissionCameraRef.current.onchange = null;
-      }
-      void stopScanner(scannerRef, scannedRef);
-    };
-  }, [isOpen,]);
+  init();
+
+  return () => {
+    cleanupPermission();
+
+    void stopScanner(scannerRef, scannedRef);
+  };
+}, [isOpen]);
 
     // Pause and resume the scanner when the page visibility changes
   useEffect(() => {
