@@ -6,6 +6,7 @@ import { ORDER_PROGRESS, ORDER_STATUS } from "../../../constants/order";
 import { DELIVERY_TYPE } from "../../../constants/checkout";
 // Components
 import ProgressStep from "./ProgressStep";
+import CookingVector from "../../../assets/image/1vector.png";
 
 export default function OrderProgress({ activeStep, deliveryType }) {
   const isDelivery = deliveryType === DELIVERY_TYPE.DELIVERY;
@@ -13,8 +14,8 @@ export default function OrderProgress({ activeStep, deliveryType }) {
   const activeStepId =
     ORDER_PROGRESS.find((step) => step.status === activeStep)?.id ?? null;
 
-    // Upadating Progress
-  const progress = ORDER_PROGRESS.map((step) => 
+  // Upadating Progress
+  const progress = ORDER_PROGRESS.map((step) =>
     step.status !== ORDER_STATUS.ASSIGNED
       ? step
       : {
@@ -73,11 +74,19 @@ export default function OrderProgress({ activeStep, deliveryType }) {
           rounded-2xl
           bg-orange-50
           p-5
+          flex
+          justify-between
+          items-center
         "
       >
-        <p className="text-sm font-medium text-stone-500">Estimated Time</p>
+        <div>
+          <p className="text-sm font-medium text-stone-500">Estimated Time</p>
+          <h3 className="mt-1 text-2xl font-bold text-orange-500">12–15 min</h3>
+        </div>
 
-        <h3 className="mt-1 text-2xl font-bold text-orange-500">12–15 min</h3>
+        <div>
+          <img src={CookingVector} alt="" className="h-16" />
+        </div>
       </div>
     </div>
   );

@@ -20,8 +20,8 @@ const InvoiceDocument = forwardRef(({ order }, ref) => {
       className="
         relative
         w-[546px]
-        h-[773.5px]
-        overflow-hidden
+        min-h-[773.5px]
+        h-auto
         rounded-3xl
         bg-orange-50
         px-8
@@ -30,7 +30,7 @@ const InvoiceDocument = forwardRef(({ order }, ref) => {
         print:rounded-none
         print:shadow-none
         shrink-0
-      "
+        "
     >
       {/* Header */}
 
@@ -70,7 +70,7 @@ const InvoiceDocument = forwardRef(({ order }, ref) => {
 
       {/* Note + Summary */}
 
-      <div className="mt-2 flex justify-between items-end">
+      <div className="mt-2 grid grid-cols-[1fr_auto] gap-6">
         <OrderNote note={order.customer.description} />
         <InvoiceSummary summary={order.summary} />
       </div>

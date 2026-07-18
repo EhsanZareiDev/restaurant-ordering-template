@@ -1,126 +1,127 @@
 @import "tailwindcss";
-@import url('https://fonts.cdnfonts.com/css/century-gothic-paneuropean');
+@import url("https://fonts.cdnfonts.com/css/century-gothic-paneuropean");
 
-body , h1 , h2 ,h3,h4,h5,p,input,button,label {
-    font-family: 'Century Gothic Paneuropean';
-    font-style: normal
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+input,
+button,
+label {
+  font-family: "Century Gothic Paneuropean";
+  font-style: normal;
 }
 
 .shadow-white-20px {
-    box-shadow: 0 0 30px 0 rgb(255, 255, 255);
+  box-shadow: 0 0 30px 0 rgb(255, 255, 255);
 }
 main {
-    background-color: rgb(206, 206, 197);
+  background-color: rgb(206, 206, 197);
 }
 
 .bg-gray-and-white {
-  background-image: -moz-linear-gradient( 0deg, rgb(236,237,234) 0%, rgb(248,248,246) 50%, rgb(220,219,216) 100%);
-  background-image: -webkit-linear-gradient( 0deg, rgb(236,237,234) 0%, rgb(248,248,246) 50%, rgb(220,219,216) 100%);
-  background-image: -ms-linear-gradient( 0deg, #f4f4f4 0%, #fefefe 50%, #f6f6f6 100%);
+  background-image: -moz-linear-gradient(
+    0deg,
+    rgb(236, 237, 234) 0%,
+    rgb(248, 248, 246) 50%,
+    rgb(220, 219, 216) 100%
+  );
+  background-image: -webkit-linear-gradient(
+    0deg,
+    rgb(236, 237, 234) 0%,
+    rgb(248, 248, 246) 50%,
+    rgb(220, 219, 216) 100%
+  );
+  background-image: -ms-linear-gradient(
+    0deg,
+    #f4f4f4 0%,
+    #fefefe 50%,
+    #f6f6f6 100%
+  );
 }
 .bg-gray-and-white:focus-within {
-    background-image: none;
-    background-color: #fff;
+  background-image: none;
+  background-color: #fff;
 }
-button , a {
-    cursor: pointer;
+button,
+a {
+  cursor: pointer;
 }
 
 button:focus-visible {
-    outline: none;
+  outline: none;
 }
 
 @keyframes scanner {
+  0% {
+    top: 15%;
+    opacity: 0.3;
+  }
 
-    0%{
+  50% {
+    opacity: 1;
+  }
 
-        top:15%;
-        opacity:.3;
-
-    }
-
-    50%{
-
-        opacity:1;
-
-    }
-
-    100%{
-
-        top:85%;
-        opacity:.3;
-
-    }
-
+  100% {
+    top: 85%;
+    opacity: 0.3;
+  }
 }
 
-.animate-scanner{
-
-    animation:scanner 2s linear infinite;
-
+.animate-scanner {
+  animation: scanner 2s linear infinite;
 }
 
 #qr-shaded-region {
-    border-width: 0 !important;
+  border-width: 0 !important;
 }
-
 
 @keyframes inputPulse {
+  0% {
+    transform: scale(1);
+  }
 
-    0%{
+  50% {
+    transform: scale(0.95);
+  }
 
-        transform:scale(1);
-
-    }
-
-    50%{
-
-        transform:scale(.95);
-
-    }
-
-    100%{
-
-        transform:scale(1);
-
-    }
-
+  100% {
+    transform: scale(1);
+  }
 }
 
-.animate-input-pulse{
-
-    animation:inputPulse .4s ease;
+.animate-input-pulse {
+  animation: inputPulse 0.4s ease;
 }
-
 
 @media print {
+  @page {
+    size: auto;
+    margin: 0;
+  }
 
-        @page {
+  body * {
+    visibility: hidden;
+  }
 
-        size: A5 portrait;
-        margin: 0;
-    padding: 0;
-    overflow: hidden;
-    }
+  #invoiceDocument,
+  #invoiceDocument * {
+    visibility: visible;
+  }
 
-    body * {
-        visibility: hidden;
-    }
+  #invoiceDocument {
+    position: absolute;
+    top: 0;
 
-    #invoiceDocument,
-    #invoiceDocument * {
-        visibility: visible;
-    }
+    width: 148mm;
 
-    #invoiceDocument {
-        position: absolute;
-        inset: 0;
-        margin: auto;
-        width: 148mm;
-        height: 210mm;
-        zoom: 140%;
-    }
+    min-height: 210mm; 
 
+    height: auto;
 
-
+    zoom: 155%;
+  }
 }
