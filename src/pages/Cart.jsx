@@ -9,6 +9,7 @@ import PageFooter from "../layouts/PageFooter";
 // Components
 import CartItem from "./../components/cart/CartItem";
 import OrderSummary from "./../components/orderSummary/OrderSummary";
+import EmptyCart from "../components/cart/EmptyCart";
 
 export default function Cart({
   cart,
@@ -33,11 +34,16 @@ export default function Cart({
               Shopping Cart.
             </h1>
           </div>
-          <div className="space-y-5">
-            {cart.map((item) => (
-              <CartItem key={item.id} item={item} cartActions={cartActions} />
-            ))}
-          </div>
+          {console.log(cart)}
+          {!cart || cart.length === 0 ? (
+            <EmptyCart />
+          ) : (
+            <div className="space-y-5">
+              {cart.map((item) => (
+                <CartItem key={item.id} item={item} cartActions={cartActions} />
+              ))}
+            </div>
+          )}
         </div>
 
         <aside className="lg:sticky lg:top-8 lg:self-start">
