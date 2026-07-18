@@ -1,27 +1,63 @@
+
+// Assets
+import Pepperoni from "../assets/image/Pepperoni.jpeg";
+import Cheeseburger from "../assets/image/Cheeseburger.png";
+import GrilledChickenSandwich from "../assets/image/Grilled Chicken Sandwich.jpeg";
+import CaesarSalad from "../assets/image/Caesar Salad.png";
+import FrenchFries from "../assets/image/French Fries.png";
+import Cappuccino from "../assets/image/Cappuccino.jpeg";
+
+
+
+
 const cartData = [
   {
     id: 1,
     name: "Pepperoni Pizza",
     price: 5,
-    quantity: 2,
-    image: "https://pizzadaliz.ir/Content/images/2125/Product/Thumb3/269167/%D9%BE%D9%BE%D8%B1%D9%88%D9%86%DB%8C.jpg",
+    quantity: 1,
+    image: Pepperoni,
     category: "Italian Pizza",
   },
   {
     id: 2,
-    name: "Cheese Burger",
-    price: 10,
-    quantity: 1,
-    image: "https://drive.google.com/file/d/1IyoDTvmGCU9fgMVI6OPFcavYhLsPL0Me/view?usp=drive_link",
-    category: "Italian Pizza",
+    name: "Classic Cheeseburger",
+    price: 4.5,
+    quantity: 3,
+    image: Cheeseburger,
+    category: "Burgers",
   },
   {
     id: 3,
-    name: "Chicken Sandwich",
-    price: 5,
+    name: "Grilled Chicken Sandwich",
+    price: 4,
+    quantity: 2,
+    image: GrilledChickenSandwich,
+    category: "Sandwiches",
+  },
+  {
+    id: 4,
+    name: "Caesar Salad",
+    price: 3.5,
+    quantity: 1,
+    image: CaesarSalad,
+    category: "Salads",
+  },
+  {
+    id: 5,
+    name: "French Fries",
+    price: 2,
     quantity: 3,
-    image: "https://drive.google.com/file/d/1c9fvfxQYX2eB2WpbPhNMeqhkpqqrZcju/view?usp=drive_link",
-    category: "Italian Pizza",
+    image: FrenchFries,
+    category: "Sides",
+  },
+  {
+    id: 6,
+    name: "Cappuccino",
+    price: 2.5,
+    quantity: 2,
+    image: Cappuccino,
+    category: "Coffee",
   },
 ];
 
