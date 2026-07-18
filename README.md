@@ -10,7 +10,7 @@ This project is designed as a reusable front-end template for restaurants, café
 
 ### Cart
 
-![Cart](public/screenshots/cart.png)
+![Cart](public/screenshots/Cart.png)
 
 ### Checkout
 
@@ -22,7 +22,7 @@ This project is designed as a reusable front-end template for restaurants, café
 
 ### QR Scanner
 
-![QR Scanner](public/screenshots/qr-scanner.png)
+![QR Scanner](public/screenshots/scanner.png)
 
 ---
 
