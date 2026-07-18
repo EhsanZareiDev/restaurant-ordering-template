@@ -22,7 +22,7 @@ This project is designed as a reusable front-end template for restaurants, café
 
 ### QR Scanner
 
-![QR Scanner](public/screenshots/scanner.png)
+![QR Scanner](public/screenshots/qr-scanner.png)
 
 ---
 
@@ -182,24 +182,6 @@ You can use the following information while testing the checkout process:
 - **Postal Code:** 90210
 
 > These values are for demonstration purposes only.
-
-# 📸 Screenshots
-
-### Cart
-
-![Cart](public/screenshots/cart.png)
-
-### Checkout
-
-![Checkout](public/screenshots/checkout.png)
-
-### Invoice
-
-![Invoice](public/screenshots/invoice.png)
-
-### QR Scanner
-
-![QR Scanner](public/screenshots/scanner.png)
 
 ---
 
